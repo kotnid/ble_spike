@@ -1,9 +1,16 @@
 package com.example.tkt_ble_spike;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
@@ -18,15 +25,21 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ParcelUuid;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.Manifest;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,13 +68,18 @@ public class MainActivity extends AppCompatActivity {
 
     boolean[] click_stat = {false, false, false, false};
 
+    int REQUEST_BLUETOOTH_PERMISSIONS = 127;
+    int REQUEST_CONNECTION_PERMISSIONS = 128;
+    int REQUEST_COARSE_LOCATION = 129;
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(getWindow().FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
-
+        toastmsg(""+Build.VERSION.SDK_INT);
 
         // UI
         statusText = findViewById(R.id.connection);
@@ -77,10 +95,13 @@ public class MainActivity extends AppCompatActivity {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
 
-        // Connect spike
+
+//        connect();
+
+
+        checkPermission();
+//        search();
         connect();
-
-
 
         // Set btn listener
         upBtn.setOnTouchListener(new View.OnTouchListener() {
@@ -179,6 +200,67 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void checkPermission(){
+        ActivityResultLauncher<Intent> enableBtLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() != Activity.RESULT_OK) {
+                        toastmsg("Error : permission denied");
+                    }
+                });
+        if (!bluetoothAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            enableBtLauncher.launch(enableBtIntent);
+        }
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            enableBtLauncher.launch(intent);
+        }
+
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_COARSE_LOCATION);
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN)
+                != PackageManager.PERMISSION_GRANTED && Build.VERSION.SDK_INT >= 31) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.BLUETOOTH_SCAN},
+                    REQUEST_BLUETOOTH_PERMISSIONS);
+            toastmsg("Request permission");
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_BLUETOOTH_PERMISSIONS) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                bluetoothLeScanner.startScan(scanCallback);
+                search();
+            } else {
+                toastmsg("Error : permission not granted");
+            }
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    public void search(){
+        toastmsg("Start scan");
+        bluetoothLeScanner.startScan(scanCallback);
+    }
+
+    private final ScanCallback scanCallback = new ScanCallback() {
+        @Override
+        public void onScanResult(int callbackType, ScanResult result) {
+            super.onScanResult(callbackType, result);
+        }
+    };
 
     // Connect to ble device
     @SuppressLint("MissingPermission")
