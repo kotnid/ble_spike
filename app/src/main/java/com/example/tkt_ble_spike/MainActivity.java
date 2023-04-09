@@ -56,7 +56,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        supportRequestWindowFeature(getWindow().FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
+
 
         // UI
         statusText = findViewById(R.id.connection);
