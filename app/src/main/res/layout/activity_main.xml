@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#DDD8D0"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/remote_cont"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fontFamily="@font/harmonyos_sans_black"
+        android:text="@string/remote_cont"
+        android:textAlignment="center"
+        android:textAppearance="@style/remote_cont"
+        android:textFontWeight="300"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.05"
+        app:layout_constraintWidth_percent="0.25" />
+
+    <View
+        android:id="@+id/shoot_butto"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/shoot_butto"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.6"
+        app:layout_constraintHorizontal_bias="0.90"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/shoot"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fontFamily="@font/harmonyos_sans_black"
+        android:text="@string/shoot"
+        android:textAlignment="center"
+        android:textAppearance="@style/shoot"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintBottom_toBottomOf="@id/shoot_butto"
+        app:layout_constraintEnd_toEndOf="@id/shoot_butto"
+        app:layout_constraintHeight_percent="0.1"
+
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@id/shoot_butto"
+        app:layout_constraintTop_toTopOf="@id/shoot_butto"
+        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintWidth_percent="0.15" />
+
+    <View
+        android:id="@+id/rectangle_1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/rectangle"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintHeight_percent="0.2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintVertical_bias="0.25"/>
+
+    <View
+        android:id="@+id/rectangle_2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/rectangle"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintHeight_percent="0.2"
+        app:layout_constraintStart_toStartOf="@id/rectangle_1"
+        app:layout_constraintTop_toBottomOf="@id/rectangle_1" />
+
+    <View
+        android:id="@+id/rectangle_3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/rectangle"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="@id/rectangle_1"
+        app:layout_constraintHeight_percent="0.2"
+        app:layout_constraintStart_toStartOf="@id/rectangle_1"
+        app:layout_constraintTop_toBottomOf="@id/rectangle_2" />
+
+    <View
+        android:id="@+id/rectangle_4"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/rectangle"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@id/rectangle_1"
+        app:layout_constraintHeight_percent="0.2"
+
+
+        app:layout_constraintTop_toBottomOf="@id/rectangle_1" />
+
+    <View
+        android:id="@+id/rectangle_5"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/rectangle"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintHeight_percent="0.2"
+        app:layout_constraintStart_toEndOf="@id/rectangle_2"
+        app:layout_constraintTop_toBottomOf="@id/rectangle_1" />
+
+    <TextView
+        android:id="@+id/connection"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fontFamily="@font/harmonyos_sans_black"
+        android:fontWeight="500"
+        android:text="@string/connection_"
+        android:textAlignment="center"
+        android:textAppearance="@style/connection_"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.9"
+        app:layout_constraintWidth_percent="0.25" />
+
+    <View
+        android:id="@+id/vector1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/vector"
+        app:layout_constraintBottom_toBottomOf="@id/rectangle_1"
+        app:layout_constraintEnd_toEndOf="@id/rectangle_1"
+        app:layout_constraintHeight_percent="0.03"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@id/rectangle_1"
+        app:layout_constraintTop_toTopOf="@id/rectangle_1"
+        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintWidth_percent="0.03" />
+
+    <View
+        android:id="@+id/vector2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/vector"
+        android:rotation="180"
+        app:layout_constraintBottom_toBottomOf="@id/rectangle_3"
+        app:layout_constraintEnd_toEndOf="@id/rectangle_3"
+        app:layout_constraintHeight_percent="0.03"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@id/rectangle_3"
+        app:layout_constraintTop_toTopOf="@id/rectangle_3"
+        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintWidth_percent="0.03" />
+
+    <View
+        android:id="@+id/vector3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/vector"
+        android:rotation="270"
+        app:layout_constraintBottom_toBottomOf="@id/rectangle_4"
+        app:layout_constraintEnd_toEndOf="@id/rectangle_4"
+        app:layout_constraintHeight_percent="0.03"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@id/rectangle_4"
+        app:layout_constraintTop_toTopOf="@id/rectangle_4"
+        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintWidth_percent="0.03" />
+
+    <View
+        android:id="@+id/vector4"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/vector"
+        android:rotation="90"
+        app:layout_constraintBottom_toBottomOf="@id/rectangle_5"
+        app:layout_constraintEnd_toEndOf="@id/rectangle_5"
+        app:layout_constraintHeight_percent="0.03"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@id/rectangle_5"
+        app:layout_constraintTop_toTopOf="@id/rectangle_5"
+        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintWidth_percent="0.03" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
