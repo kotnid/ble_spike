@@ -19,6 +19,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.ParcelUuid;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -49,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
     View downBtn;
     View leftBtn;
     View rightBtn;
+    View shootBtn;
+    TextView shootText;
 
     boolean[] click_stat = {false, false, false, false};
 
@@ -66,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
         downBtn = findViewById(R.id.rectangle_3);
         leftBtn = findViewById(R.id.rectangle_4);
         rightBtn = findViewById(R.id.rectangle_5);
+        shootBtn = findViewById(R.id.shoot_butto);
+        shootText = findViewById(R.id.shoot);
         statusText.setText("Bluetooth is not connected");
 
         // Initialize ble
@@ -155,6 +160,22 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
                 return true;
+            }
+        });
+
+        shootBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                view.setEnabled(false);
+                sendmsg("6");
+                shootText.setTextColor(0xFF404040);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        view.setEnabled(true);
+                        shootText.setTextColor(0xff000000);
+                    }
+                }, 2000);
             }
         });
     }
