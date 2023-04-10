@@ -16,6 +16,8 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattService;
+import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanFilter;
@@ -52,11 +54,13 @@ public class MainActivity extends AppCompatActivity {
     private BluetoothDevice device;
     private BluetoothGatt bluetoothGatt;
     private String deviceAddress = "A8:E2:C1:9B:07:89";
+    public static String RX_CHAR = "6E400002-B5A3-F393-E0A9-E50E24DCCA9E";
     private boolean connect_stat = false;
-    public static final UUID RX_SERVICE_UUID = UUID.fromString("6E400001-B5A3-F393-E0A9-E50E24DCCA9E");
-    public static final UUID RX_CHAR_UUID = UUID.fromString("6E400002-B5A3-F393-E0A9-E50E24DCCA9E");
+    public static  UUID RX_SERVICE_UUID;
+    public static  UUID RX_CHAR_UUID ;
     public static final UUID TX_CHAR_UUID = UUID.fromString("6E400001-B5A3-F393-E0A9-E50E24DCCA9E");
 
+    public String deviceName = "tkt BLE";
 
     TextView statusText;
     View upBtn;
@@ -100,8 +104,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         checkPermission();
-//        search();
-        connect();
+        search();
+//        connect();
 
         // Set btn listener
         upBtn.setOnTouchListener(new View.OnTouchListener() {
@@ -251,14 +255,25 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("MissingPermission")
     public void search(){
-        toastmsg("Start scan");
+//        toastmsg("Start scan");
+        Log.d("GATT" , "Start scan");
         bluetoothLeScanner.startScan(scanCallback);
     }
 
     private final ScanCallback scanCallback = new ScanCallback() {
+        @SuppressLint("MissingPermission")
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
             super.onScanResult(callbackType, result);
+            BluetoothDevice foundDevice = result.getDevice();
+            toastmsg("Device found:"+foundDevice.getName()+" MAC:"+foundDevice.getAddress());
+            Log.d("GATT" , "Device found:"+foundDevice.getName()+" MAC:"+foundDevice.getAddress());
+
+            if (foundDevice.getName() != null && foundDevice.getBondState() != BluetoothDevice.BOND_BONDED && foundDevice.getName().contains(deviceName)){
+                deviceAddress = foundDevice.getAddress();
+                bluetoothLeScanner.stopScan(scanCallback);
+                connect();
+            }
         }
     };
 
@@ -276,7 +291,14 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             super.onConnectionStateChange(gatt, status, newState);
-            if (BluetoothGatt.GATT_SUCCESS == status) {
+            if (newState == BluetoothProfile.STATE_DISCONNECTED){
+                Log.d("GATT", "Disconnected");
+//                bluetoothGatt.close();
+                connect_stat = false;
+                statusText.setText("Bluetooth is not connected");
+                search();
+            }
+            else if (BluetoothGatt.GATT_SUCCESS == status) {
                 Log.d("GATT", "Connected");
                 gatt.discoverServices();
                 bluetoothGatt = gatt;
@@ -284,9 +306,25 @@ public class MainActivity extends AppCompatActivity {
                 statusText.setText("Bluetooth is connected to LEGO Spike Prime");
             } else {
                 Log.d("GATT", "Disconnected");
-                bluetoothGatt.close();
+//                bluetoothGatt.close();
                 connect_stat = false;
                 statusText.setText("Bluetooth is not connected");
+                search();
+            }
+        }
+
+        public void onServicesDiscovered(BluetoothGatt gatt, int status) {
+            if (status == BluetoothGatt.GATT_SUCCESS) {
+                List<BluetoothGattService> services = gatt.getServices();
+                for (BluetoothGattService service : services) {
+                    Log.d("GATT", "Service UUID: " + service.getUuid().toString());
+                    RX_SERVICE_UUID = service.getUuid();
+                    List<BluetoothGattCharacteristic> characteristics = service.getCharacteristics();
+                    for (BluetoothGattCharacteristic characteristic : characteristics) {
+                        Log.d("GATT", "Characteristic UUID: " + characteristic.getUuid().toString());
+                        RX_CHAR_UUID = characteristic.getUuid();
+                    }
+                }
             }
         }
 
