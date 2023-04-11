@@ -37,6 +37,7 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     public static  UUID RX_CHAR_UUID ;
     public static final UUID TX_CHAR_UUID = UUID.fromString("6E400001-B5A3-F393-E0A9-E50E24DCCA9E");
 
-    public String deviceName = "tkt BLE";
+    public String deviceName = "Bowling Robot BLE Handler";
 
     TextView statusText;
     View upBtn;
@@ -82,7 +83,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(getWindow().FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+
         setContentView(R.layout.activity_main);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
         toastmsg(""+Build.VERSION.SDK_INT);
 
         // UI
