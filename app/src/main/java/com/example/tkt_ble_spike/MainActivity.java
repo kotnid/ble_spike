@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     public static  UUID RX_CHAR_UUID ;
     public static final UUID TX_CHAR_UUID = UUID.fromString("6E400001-B5A3-F393-E0A9-E50E24DCCA9E");
 
-    public String deviceName = "Bowling Robot BLE Handler";
+    public String deviceName = "robot";
 
     TextView statusText;
     View upBtn;
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
-        toastmsg(""+Build.VERSION.SDK_INT);
+//        toastmsg(""+Build.VERSION.SDK_INT);
 
         // UI
         statusText = findViewById(R.id.connection);
@@ -105,10 +105,6 @@ public class MainActivity extends AppCompatActivity {
         // Initialize ble
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
-
-
-//        connect();
-
 
         checkPermission();
         search();
@@ -127,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
                         click_stat[0] = true;
                         break;
                     case MotionEvent.ACTION_UP:
-                        if(!click_stat[0])sendmsg("5");
+                        if(click_stat[0])sendmsg("5");
                         click_stat[0] = false;
                         break;
                 }
@@ -147,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
                         click_stat[1] = true;
                         break;
                     case MotionEvent.ACTION_UP:
-                        if(!click_stat[1])sendmsg("5");
+                        if(click_stat[1])sendmsg("5");
                         click_stat[1] = false;
                         break;
                 }
@@ -167,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
                         click_stat[2] = true;
                         break;
                     case MotionEvent.ACTION_UP:
-                        if(!click_stat[2])sendmsg("5");
+                        if(click_stat[2])sendmsg("5");
                         click_stat[2] = false;
                         break;
                 }
@@ -187,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
                         click_stat[3] = true;
                         break;
                     case MotionEvent.ACTION_UP:
-                        if(!click_stat[3])sendmsg("5");
+                        if(click_stat[3])sendmsg("5");
                         click_stat[3] = false;
                         break;
                 }
@@ -262,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("MissingPermission")
     public void search(){
-//        toastmsg("Start scan");
+        toastmsg("Start scan");
         Log.d("GATT" , "Start scan");
         bluetoothLeScanner.startScan(scanCallback);
     }
@@ -346,7 +342,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void sendmsg(String msg){
         if(connect_stat){
-            BluetoothGattCharacteristic characteristic = bluetoothGatt.getService(RX_SERVICE_UUID).getCharacteristic(RX_CHAR_UUID);
+            UUID TMP_SERVICE_UUID = UUID.fromString("6e400001-b5a3-f393-e0a9-e50e24dcca9e");
+            UUID TMP_CHAR_UUID = UUID.fromString("6e400002-b5a3-f393-e0a9-e50e24dcca9e");
+            BluetoothGattCharacteristic characteristic = bluetoothGatt.getService(TMP_SERVICE_UUID).getCharacteristic(TMP_CHAR_UUID);
             byte[] byteArrray = msg.getBytes();
             characteristic.setValue(byteArrray);
             @SuppressLint("MissingPermission") boolean stat = bluetoothGatt.writeCharacteristic(characteristic);
