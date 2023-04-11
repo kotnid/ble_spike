@@ -107,8 +107,8 @@ public class MainActivity extends AppCompatActivity {
         bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
 
         checkPermission();
-        search();
-//        connect();
+//        search();
+        connect();
 
         // Set btn listener
         upBtn.setOnTouchListener(new View.OnTouchListener() {
